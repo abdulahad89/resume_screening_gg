@@ -32,10 +32,10 @@ GOOGLE_AI_MODELS = {
 }
 
 # Model selection - All Google AI
-MAIN_MODEL = GOOGLE_AI_MODELS["gemini_pro"]            # Main model for all tasks
-SCORING_MODEL = GOOGLE_AI_MODELS["gemini_pro"]         # For relevance scoring
-CHATBOT_MODEL = GOOGLE_AI_MODELS["gemini_pro"]         # For chatbot
-DATA_EXTRACTION_MODEL = GOOGLE_AI_MODELS["gemini_pro"] # For data extraction
+MAIN_MODEL = GOOGLE_AI_MODELS["gemini_pro_002"]            # Main model for all tasks
+SCORING_MODEL = GOOGLE_AI_MODELS["gemini_pro_002"]         # For relevance scoring
+CHATBOT_MODEL = GOOGLE_AI_MODELS["gemini_pro_002"]         # For chatbot
+DATA_EXTRACTION_MODEL = GOOGLE_AI_MODELS["gemini_pro_002"] # For data extraction
 
 # File processing settings
 UPLOAD_FOLDER = "./data/uploads"

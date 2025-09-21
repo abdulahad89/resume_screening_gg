@@ -7,7 +7,7 @@ import os
 
 # Configure page
 st.set_page_config(
-    page_title="Resume Screening System - Google AI Only",
+    page_title="Resume Screening System",
     page_icon="🤖",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -26,18 +26,18 @@ def main():
     
     # Header
     st.title("🤖 AI Resume Screening System")
-    st.markdown("### **Google AI Only:** Gemini 1.5 Flash for All Tasks")
+    #st.markdown("### **Google AI Only:** Gemini 1.5 Flash for All Tasks")
     
     # Initialize screening engine with error handling
     if st.session_state.screening_engine is None:
-        with st.spinner("🚀 Initializing Google AI system..."):
+        with st.spinner("🚀 Initializing AI system..."):
             try:
                 from models.google_screening_engine import GoogleAIScreeningEngine
                 st.session_state.screening_engine = GoogleAIScreeningEngine()
-                st.success("✅ Google AI system initialized!")
+                st.success("✅ AI system initialized!")
             except Exception as e:
                 st.error(f"❌ System initialization failed: {e}")
-                st.info("💡 Check your Google AI Pro API key in secrets.toml")
+                st.info("💡 Check your API key in secrets.toml")
                 return
     
     # Sidebar - System Status
@@ -65,7 +65,7 @@ def main():
 
 def render_sidebar():
     """Render sidebar with system info"""
-    st.sidebar.title("🤖 Google AI System")
+    st.sidebar.title("🤖 AI System")
     
     # Quick status check
     if st.session_state.screening_engine:
@@ -73,22 +73,21 @@ def render_sidebar():
             system_status = st.session_state.screening_engine.get_system_status()
             
             if system_status.get('ready_for_screening', False):
-                st.sidebar.success("✅ Google AI Ready")
+                st.sidebar.success("✅ AI Ready")
             else:
-                st.sidebar.error("❌ Google AI Issues")
+                st.sidebar.error("❌ AI Issues")
                 
                 # Show what's broken
                 google_status = system_status.get('google_ai_status', {})
                 conn_status = google_status.get('connection_status', {})
                 
                 if not conn_status.get('connected', False):
-                    st.sidebar.write("❌ Gemini connection failed")
+                    st.sidebar.write("❌ Connection failed")
                     error = conn_status.get('error', 'Unknown error')
                     st.sidebar.write(f"Error: {error}")
             
             # Model info
             st.sidebar.info("""
-            **🤖 All Tasks:** Gemini 1.5 Flash
             
             **✅ Data Extraction**
             **✅ Relevance Scoring** 
@@ -141,7 +140,7 @@ def render_resume_screening():
             system_status = st.session_state.screening_engine.get_system_status()
             
             if not system_status.get('ready_for_screening', False):
-                st.warning("⚠️ Google AI not ready. Check API key in System Status.")
+                st.warning("⚠️ System not ready. Check API key in System Status.")
                 return
                 
         except Exception as e:
@@ -191,19 +190,20 @@ def render_resume_screening():
     st.markdown("---")
     
     if uploaded_files and job_description:
-        col1, col2, col3 = st.columns([1, 1, 1])
+        # col1, col2, col3 = st.columns([1, 1, 1])
+        col1, col2 = st.columns([1, 1])
         
         with col1:
-            if st.button("🚀 Analyze with Gemini", type="primary", use_container_width=True):
+            if st.button("🚀 Analyze with AI", type="primary", use_container_width=True):
                 process_resumes(uploaded_files, job_description)
         
         with col2:
             if st.button("📊 Quick Preview", use_container_width=True):
                 show_quick_preview(uploaded_files, job_description)
         
-        with col3:
-            if st.button("💰 Cost Estimate", use_container_width=True):
-                show_cost_estimate(len(uploaded_files))
+        # with col3:
+        #     if st.button("💰 Cost Estimate", use_container_width=True):
+        #         show_cost_estimate(len(uploaded_files))
     
     elif uploaded_files and not job_description:
         st.warning("⚠️ Please provide a job description to analyze resumes")
@@ -213,7 +213,7 @@ def render_resume_screening():
 def process_resumes(uploaded_files, job_description):
     """Process uploaded resumes with Google AI"""
     
-    st.markdown("### 🤖 Processing with Google AI Gemini...")
+    st.markdown("### 🤖 Processing with AI...")
     
     start_time = datetime.now()
     
@@ -231,7 +231,7 @@ def process_resumes(uploaded_files, job_description):
     # Show summary
     summary = results.get('summary', {})
     
-    st.success(f"✅ Google AI processing completed in {processing_time:.1f} seconds!")
+    st.success(f"✅ AI processing completed in {processing_time:.1f} seconds!")
     
     # Quick metrics
     col1, col2, col3, col4 = st.columns(4)
@@ -247,11 +247,11 @@ def process_resumes(uploaded_files, job_description):
     
     with col4:
         google_ai_calls = summary.get('google_ai_calls', 0)
-        st.metric("Gemini API Calls", google_ai_calls)
+        st.metric("API Calls", google_ai_calls)
     
     # Show top candidates
     if results.get('results'):
-        st.markdown("### 🏆 Top Candidates (Google AI Analysis)")
+        st.markdown("### 🏆 Top Candidates ")
         
         top_candidates = results['results'][:5]  # Top 5
         
@@ -261,14 +261,14 @@ def process_resumes(uploaded_files, job_description):
                 col1, col2 = st.columns(2)
                 
                 with col1:
-                    st.markdown("**📊 Gemini Scores**")
+                    st.markdown("**📊 Scores**")
                     scores = candidate['scores']
-                    st.write(f"• Relevance (Gemini): {scores['relevance_score']:.3f}")
+                    st.write(f"• Relevance : {scores['relevance_score']:.3f}")
                     st.write(f"• Experience: {scores['experience_score']:.3f}")
                     st.write(f"• Skills Match: {scores['skills_score']:.3f}")
                 
                 with col2:
-                    st.markdown("**🤖 Gemini Insights**")
+                    st.markdown("**🤖 Insights**")
                     analysis = candidate.get('analysis', {})
                     
                     # Show candidate summary
@@ -289,7 +289,7 @@ def process_resumes(uploaded_files, job_description):
         
         # Export option
         st.markdown("---")
-        if st.button("📥 Export Google AI Results"):
+        if st.button("📥 Export Results"):
             csv_path = st.session_state.screening_engine.export_results_to_csv()
             if csv_path:
                 st.success(f"✅ Results exported to {csv_path}")
@@ -305,7 +305,7 @@ def process_resumes(uploaded_files, job_description):
 
 def show_quick_preview(uploaded_files, job_description):
     """Show quick preview"""
-    st.info("🔍 Quick Preview - Google AI Processing")
+    st.info("🔍 Quick Preview - AI Processing")
     
     # Show processing details
     st.write(f"**Files to process:** {len(uploaded_files)}")
@@ -316,9 +316,9 @@ def show_quick_preview(uploaded_files, job_description):
     st.write(f"**Estimated processing time:** {estimated_time} seconds")
     
     # Show processing steps
-    st.write("**Google AI Processing Steps:**")
+    st.write("**Processing Steps:**")
     st.write("1. 📄 Parse resume text")
-    st.write("2. 🤖 Extract structured data with Gemini")
+    st.write("2. 🤖 Extract structured data ")
     st.write("3. 🎯 Score relevance with Gemini")
     st.write("4. 📊 Generate detailed analysis with Gemini")
     st.write("5. 💬 Prepare chatbot context")
@@ -365,7 +365,7 @@ def render_results_analysis():
     summary = results.get('summary', {})
     
     # Summary metrics
-    st.header("📊 Google AI Analysis Summary")
+    st.header("📊 Analysis Summary")
     
     col1, col2, col3, col4 = st.columns(4)
     
@@ -380,11 +380,11 @@ def render_results_analysis():
         st.metric("Avg Score", f"{summary.get('avg_composite_score', 0):.3f}")
     
     with col4:
-        st.metric("Gemini Calls", summary.get('google_ai_calls', 0))
+        st.metric("API Calls", summary.get('google_ai_calls', 0))
     
     # Google AI Performance
     if 'google_ai_performance' in summary:
-        st.markdown("### 🤖 Google AI Performance")
+        st.markdown("### 🤖 AI Performance")
         
         perf = summary['google_ai_performance']
         
@@ -429,7 +429,7 @@ def render_results_analysis():
     
     # Google AI insights
     if 'google_ai_insights' in results:
-        st.markdown("### 🧠 Google AI Quality Insights")
+        st.markdown("### 🧠 AI Quality Insights")
         
         insights = results['google_ai_insights']
         
@@ -440,7 +440,7 @@ def render_results_analysis():
             
             with col1:
                 st.success(f"""
-                **🤖 Gemini Performance**
+                **🤖 Performance**
                 
                 Extraction Success: {perf_insights.get('extraction_success_rate', 0)*100:.1f}%
                 
@@ -481,7 +481,7 @@ def render_results_analysis():
                 'Experience': scores.get('experience_score', 0),
                 'Skills': scores.get('skills_score', 0),
                 'Years Exp': extracted_data.get('total_years_experience', 0),
-                'Gemini Calls': result.get('google_ai_calls', 0),
+                # 'Gemini Calls': result.get('google_ai_calls', 0),
                 'Analysis': 'Yes' if analysis.get('detailed_analysis') else 'No'
             })
         
@@ -510,8 +510,8 @@ def render_results_analysis():
 def render_ai_chatbot():
     """Render Google AI chatbot interface"""
     
-    st.header("💬 Google AI Resume Chatbot")
-    st.markdown("**Powered by Google AI Gemini 1.5 Flash**")
+    st.header("💬 Resume Chatbot")
+    # st.markdown("**Powered by Google AI Gemini 1.5 Flash**")
     
     if not st.session_state.screening_engine:
         st.error("❌ System not initialized")
@@ -523,7 +523,7 @@ def render_ai_chatbot():
         google_ready = system_status.get('ready_for_screening', False)
         
         if not google_ready:
-            st.warning("⚠️ Google AI not connected. Check your API key.")
+            st.warning("⚠️ Model not connected. Check your API key.")
             return
             
     except Exception as e:
@@ -545,7 +545,7 @@ def render_ai_chatbot():
                 st.success(f"✅ Using {selected_resume} as context for Gemini")
                 
                 # Show brief resume info
-                with st.expander("📋 Resume Context for Gemini"):
+                with st.expander("📋 Resume Context for model"):
                     analysis = resume_data.get('analysis', {})
                     extracted_data = analysis.get('extracted_data', {})
                     
@@ -557,7 +557,7 @@ def render_ai_chatbot():
                         st.write(f"• Experience: {extracted_data.get('total_years_experience', 0)} years")
                     
                     with col2:
-                        st.write("**Gemini Analysis:**")
+                        st.write("**Analysis:**")
                         st.write(f"• Composite Score: {resume_data['scores']['composite_score']:.3f}")
                         st.write(f"• Relevance Score: {resume_data['scores']['relevance_score']:.3f}")
     else:
@@ -571,29 +571,29 @@ def render_ai_chatbot():
         for i, exchange in enumerate(st.session_state.chatbot_history[-5:]):  # Show last 5
             with st.expander(f"Chat {i+1}: {exchange['question'][:50]}..."):
                 st.write(f"**Q:** {exchange['question']}")
-                st.write(f"**Gemini:** {exchange['answer']}")
+                st.write(f"**Model:** {exchange['answer']}")
                 st.caption(f"Time: {exchange.get('time', 'Unknown')}")
     
     # Chat input
-    st.markdown("### 💬 Ask Gemini")
+    st.markdown("### 💬 Ask AI")
     
     col1, col2 = st.columns([4, 1])
     
     with col1:
         user_question = st.text_input(
-            "Ask Gemini about resumes or hiring:",
+            "Ask chatbot about resumes or hiring:",
             placeholder="e.g., What are this candidate's main strengths?",
             key="gemini_chat_input"
         )
     
     with col2:
-        ask_button = st.button("💬 Ask Gemini", type="primary")
+        ask_button = st.button("💬 Ask chatbot", type="primary")
     
     if ask_button and user_question:
         process_gemini_chat(user_question, selected_resume)
     
     # Suggested questions
-    st.markdown("### 💡 Suggested Questions for Gemini")
+    st.markdown("### 💡 Suggested Questions for chatbot")
     
     suggested_questions = get_suggested_questions(selected_resume)
     
@@ -638,12 +638,12 @@ def process_gemini_chat(question, selected_resume):
     
     # Get response from Google AI
     try:
-        with st.spinner("🤖 Gemini is thinking..."):
+        with st.spinner("🤖 Chatbot is thinking..."):
             google_ai = st.session_state.screening_engine.google_ai_manager
             response = google_ai.chat_response(question, resume_context)
         
         if response['success']:
-            st.success("✅ Response from Gemini:")
+            st.success("✅ Response from chatbot:")
             st.write(response['answer'])
             
             # Add to history
@@ -658,7 +658,7 @@ def process_gemini_chat(question, selected_resume):
             # Auto-refresh to show in history
             st.rerun()
         else:
-            st.error(f"❌ Gemini chat failed: {response.get('error', 'Unknown error')}")
+            st.error(f"❌ Model chat failed: {response.get('error', 'Unknown error')}")
             
     except Exception as e:
         st.error(f"❌ Chat error: {e}")
@@ -688,7 +688,7 @@ def get_suggested_questions(selected_resume):
 def render_system_status():
     """Render system status and diagnostics"""
     
-    st.header("⚙️ Google AI System Status")
+    st.header("⚙️ System Status")
     
     if not st.session_state.screening_engine:
         st.error("❌ System not initialized")
@@ -704,18 +704,18 @@ def render_system_status():
         
         # Overall status
         if system_status.get('ready_for_screening', False):
-            st.success("✅ Google AI System Ready for Resume Screening")
+            st.success("✅ AI System Ready for Resume Screening")
         else:
-            st.error("❌ Google AI Issues Detected")
+            st.error("❌ AI Issues Detected")
         
         # Google AI Status Details
-        st.markdown("### 🤖 Google AI (Gemini) Status")
+        st.markdown("### 🤖 AI Status")
         
         google_status = system_status.get('google_ai_status', {})
         conn_status = google_status.get('connection_status', {})
         
         if conn_status.get('connected', False):
-            st.success("✅ Gemini Connected and Ready")
+            st.success("✅ Connected and Ready")
             
             models = google_status.get('models', {})
             
@@ -738,7 +738,7 @@ def render_system_status():
                     for model in conn_status['models_accessible']:
                         st.write(f"• {model}")
         else:
-            st.error("❌ Gemini Connection Failed")
+            st.error("❌ Connection Failed")
             error_msg = conn_status.get('error', 'Unknown error')
             st.error(f"**Error:** {error_msg}")
         
@@ -793,10 +793,10 @@ def render_system_status():
             from config import GOOGLE_AI_API_KEY
             
             if GOOGLE_AI_API_KEY:
-                st.success("✅ Google AI Pro API key configured")
+                st.success("✅  API key configured")
                 st.info(f"Key length: {len(GOOGLE_AI_API_KEY)} characters")
             else:
-                st.error("❌ Google AI Pro API key missing")
+                st.error("❌ API key missing")
                 st.info("Add GOOGLE_AI_API_KEY to .streamlit/secrets.toml")
                 
         except Exception as e:
@@ -809,7 +809,7 @@ def render_system_status():
         
         with col1:
             if st.button("🧪 Run Diagnostics"):
-                with st.spinner("Running Google AI diagnostics..."):
+                with st.spinner("Running AI diagnostics..."):
                     diagnostics = st.session_state.screening_engine.run_diagnostics()
                     
                     st.json(diagnostics)

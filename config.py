@@ -26,9 +26,9 @@ GOOGLE_AI_MODELS = {
     "gemini_pro": "gemini-1.5-pro-latest",               # Best quality, most capable
     "gemini_flash": "gemini-1.5-flash-latest",           # Faster, still excellent  
     "gemini_pro_002": "gemini-1.5-pro-002",             # Stable version
-    "flash_20_lite": "Gemini 2.0 Flash-Lite",
-    "flash_20": "Gemini 2.0 Flash",
-    "flash_25_lite": "Gemini 2.5 Flash-Lite"
+    "flash_20_lite": "gemini-2.0-flash-Lite",
+    "flash_20": "gemini-2.0-flash",
+    "flash_25_lite": "gemini-2.5-flash-Lite"
 }
 
 # Model selection - All Google AI

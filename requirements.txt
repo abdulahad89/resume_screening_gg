@@ -1,0 +1,30 @@
+# Resume Screening System - Google AI Only
+# Simplified requirements for Google AI-only solution
+
+# Core Streamlit
+streamlit>=1.28.0
+pandas>=1.5.0
+numpy>=1.24.0
+
+# Document Processing
+PyMuPDF>=1.23.0
+python-docx>=0.8.11
+
+# Google AI Integration - ONLY DEPENDENCY WE NEED
+google-generativeai>=0.3.0
+
+# Utilities
+python-dateutil>=2.8.0
+
+# Optional: For enhanced text processing (lightweight)
+# textstat>=0.7.0
+
+# NOTE: Removed all these compared to hybrid version:
+# - requests (no HuggingFace API needed)
+# - nltk (Google AI handles NLP)
+# - fuzzywuzzy (Google AI handles matching)
+# - python-Levenshtein (not needed)
+# - scipy (no embeddings math needed)
+# - scikit-learn (no ML needed - Google AI does it all)
+
+# This is a much simpler, lighter solution!

@@ -181,13 +181,6 @@ Be thorough and accurate. If information is not available, use null or empty arr
 **Candidate Information:**
 {candidate_data}
 
-**Evaluation Criteria:**
-1. **Technical Skills Match (30%)** - How well do candidate's technical skills align?
-2. **Experience Relevance (35%)** - How relevant is their work experience?
-3. **Education & Qualifications (15%)** - Educational background alignment
-4. **Career Progression (10%)** - Growth and advancement in career
-5. **Cultural & Soft Skills Fit (10%)** - Communication, leadership, teamwork
-
 **Instructions:**
 Provide a relevance score from 0-100 and detailed analysis. Be Conservative in scoring the candidate.
 

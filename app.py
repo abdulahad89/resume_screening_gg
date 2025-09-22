@@ -99,7 +99,7 @@ def render_sidebar():
             stats = system_status.get('processing_stats', {})
             if stats.get('total_resumes_processed', 0) > 0:
                 st.sidebar.metric("Resumes Processed", stats['total_resumes_processed'])
-                st.sidebar.metric("Google AI Calls", stats['google_ai_calls'])
+                st.sidebar.metric("Model Calls", stats['google_ai_calls'])
                 
         except Exception as e:
             st.sidebar.error("❌ System Error")
@@ -402,9 +402,9 @@ def render_results_analysis():
             total_calls = perf.get('total_calls', 0)
             st.metric("Total API Calls", total_calls)
             
-            if total_calls > 0:
-                cost_estimate = total_calls * 0.002  # Rough estimate
-                st.metric("Est. Cost", f"${cost_estimate:.4f}")
+            # if total_calls > 0:
+            #     cost_estimate = total_calls * 0.002  # Rough estimate
+            #     st.metric("Est. Cost", f"${cost_estimate:.4f}")
     
     # Score distribution
     if 'score_distribution' in summary:
@@ -477,12 +477,12 @@ def render_results_analysis():
                 'Filename': result['filename'],
                 'Candidate': extracted_data.get('candidate_name', 'Unknown'),
                 'Composite Score': scores.get('composite_score', 0),
-                'Relevance (Gemini)': scores.get('relevance_score', 0),
+                'Relevance': scores.get('relevance_score', 0),
                 'Experience': scores.get('experience_score', 0),
                 'Skills': scores.get('skills_score', 0),
                 'Years Exp': extracted_data.get('total_years_experience', 0),
                 # 'Gemini Calls': result.get('google_ai_calls', 0),
-                'Analysis': 'Yes' if analysis.get('detailed_analysis') else 'No'
+                # 'Analysis': 'Yes' if analysis.get('detailed_analysis') else 'No'
             })
         
         df = pd.DataFrame(result_data)
@@ -542,7 +542,7 @@ def render_ai_chatbot():
             # Find selected resume data
             resume_data = next((r for r in results if r['filename'] == selected_resume), None)
             if resume_data:
-                st.success(f"✅ Using {selected_resume} as context for Gemini")
+                st.success(f"✅ Using {selected_resume} as context for chatbot")
                 
                 # Show brief resume info
                 with st.expander("📋 Resume Context for model"):
@@ -566,7 +566,7 @@ def render_ai_chatbot():
     
     # Chat history
     if st.session_state.chatbot_history:
-        st.markdown("### 📜 Chat History with Gemini")
+        st.markdown("### 📜 Chat History")
         
         for i, exchange in enumerate(st.session_state.chatbot_history[-5:]):  # Show last 5
             with st.expander(f"Chat {i+1}: {exchange['question'][:50]}..."):
@@ -732,11 +732,11 @@ def render_system_status():
                 Chatbot: {models.get('chatbot_model', 'Unknown')}
                 """)
             
-            with col2:
-                if conn_status.get('models_accessible'):
-                    st.info("**📡 Available Models:**")
-                    for model in conn_status['models_accessible']:
-                        st.write(f"• {model}")
+            # with col2:
+            #     if conn_status.get('models_accessible'):
+            #         st.info("**📡 Available Models:**")
+            #         for model in conn_status['models_accessible']:
+            #             st.write(f"• {model}")
         else:
             st.error("❌ Connection Failed")
             error_msg = conn_status.get('error', 'Unknown error')
@@ -756,13 +756,13 @@ def render_system_status():
             st.metric("Avg Processing Time", f"{stats.get('avg_processing_time', 0):.2f}s")
         
         with col3:
-            st.metric("Total Gemini Calls", stats.get('google_ai_calls', 0))
+            st.metric("Total model Calls", stats.get('google_ai_calls', 0))
         
         with col4:
             google_ai_calls = stats.get('google_ai_calls', 0)
             google_ai_errors = stats.get('google_ai_errors', 0)
             success_rate = ((google_ai_calls - google_ai_errors) / google_ai_calls * 100) if google_ai_calls > 0 else 100
-            st.metric("Gemini Success Rate", f"{success_rate:.1f}%")
+            st.metric("Model Success Rate", f"{success_rate:.1f}%")
         
         # API Usage Breakdown
         if google_ai_calls > 0:

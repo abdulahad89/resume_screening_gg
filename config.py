@@ -189,7 +189,7 @@ Be thorough and accurate. If information is not available, use null or empty arr
 5. **Cultural & Soft Skills Fit (10%)** - Communication, leadership, teamwork
 
 **Instructions:**
-Provide a relevance score from 0-100 and detailed analysis.
+Provide a relevance score from 0-100 and detailed analysis. Be Conservative in scoring the candidate.
 
 **Response Format:**
 ```json
